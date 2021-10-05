@@ -1,51 +1,42 @@
 <template>
-  <form class="section" v-if="open" @submit.prevent="submitTask">
-    <div class="form-control">
-      <label for="task">Task</label>
-      <input type="text" id="task" v-model="task" />
-    </div>
-    <div class="form-control">
-      <label for="date">Date</label>
-      <input type="date" id="date" v-model="date" />
-    </div>
-    <input type="submit" class="btn" value="Add Task" :disabled="!task.trim()" />
+  <form class="add-task" @submit.prevent="submitTask">
+    <label for="task-name">Task</label>
+    <input type="text" name="task-name" id="task-name" v-model="taskName" />
+    <input class="submit-button" type="submit" value="Add Task" :disabled="!taskName.trim()" />
   </form>
 </template>
 
 <script>
+import useTaskHandling from "@/compositions/useTaskHandling";
 import { ref } from "vue";
-import useTaskHandling from '../compositions/useTaskHandling';
 
 export default {
-  name: "AddTask",
-  props: {
-    open: Boolean
-  },
+  name: "Add Task",
   setup() {
     const { addTask } = useTaskHandling();
-
-    const task = ref("");
-    const date = ref("");
+    const taskName = ref("");
 
     const submitTask = () => {
-      if (task.value.trim()) {
-        addTask({ task: task.value, date: date.value });
-        task.value = "";
-        date.value = "";
+      if(taskName.value) {
+        addTask(taskName.value);
+        taskName.value = ''
       }
     };
 
     return {
-      task,
-      date,
-      submitTask
+      submitTask,
+      taskName
     };
   }
 };
 </script>
 
 <style scoped>
-.section {
-  margin-bottom: 32px;
+.add-task {
+  text-align: left;
+}
+#task-name {
+  width: 100%;
+  margin: 8px 0;
 }
 </style>

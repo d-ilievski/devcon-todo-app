@@ -1,67 +1,36 @@
 <template>
-  <li :class="{ done: task.done }">
-    <div>
-      <h3>{{ task.name }}</h3>
-      <small>{{ task.date }}</small>
-    </div>
-    <button class="btn text" @click="() => toggleCompleteTask(task.id)">
-      {{ !task.done ? "Done" : "Undo" }}
-    </button>
-  </li>
+  <li @click="() => toggleDone(id)" class="task" :class="{'done': done}">{{name}}</li>
 </template>
 
 <script>
-import useTaskHandling from "@/compositions/useTaskHandling";
+import useTaskHandling from '@/compositions/useTaskHandling'
 
 export default {
   name: "Task",
   props: {
-    task: Object,
+    id: Number,
+    name: String,
+    done: Boolean
   },
+  emits: ["toggle-task-done"],
   setup() {
-    const { toggleCompleteTask } = useTaskHandling();
+    const { toggleDone } = useTaskHandling();
 
     return {
-      toggleCompleteTask,
+      toggleDone
     };
-  },
+  }
 };
 </script>
 
 <style scoped>
-li {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 8px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.task {
+  font-size: 1.3rem;
+  cursor: pointer;
+  user-select: none;
 }
 
-button {
-  visibility: hidden;
-}
-
-h3 {
-  color: teal;
-}
-
-li:hover button,
-li.done button {
-  visibility: visible;
-}
-
-small {
-  color: grey;
-}
-
-li.done small,
-li.done h3 {
-  color: lightgrey;
-}
-
-li.done h3 {
+.task.done {
   text-decoration: line-through;
 }
 </style>
